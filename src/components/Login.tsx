@@ -10,7 +10,7 @@ export default class LoginForm extends React.Component {
     onGoogleLogin(data: any) {
         // console.log(data);
 
-        Axios.post('http://localhost:3001/api/v1/testgooglelogin', data)
+        Axios.post('http://localhost:3001/api/v1/login-google', data)
             .then(val => console.log(val.data))
             .catch(err=> console.error(err));
     }
