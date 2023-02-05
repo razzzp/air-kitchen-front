@@ -34,42 +34,6 @@
   border-radius: var(--border-radius);
 }
 
-.form-group {
-  display: flex;
-  justify-content: center;
-  align-items: inherit;
-}
-
-.form-body { 
-  display: inherit;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
-}
-
-.form-title {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
-}
-
-.form-field-group {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  margin-bottom: 2em;
-}
-
-
 .code {
   font-weight: 700;
   font-family: var(--font-mono);
@@ -80,6 +44,18 @@
   grid-template-columns: repeat(4, minmax(25%, auto));
   width: var(--max-width);
   max-width: 100%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 4rem 0;
+}
+
+.logo {
+  position: relative;
 }
 
 .card {
@@ -108,33 +84,21 @@
   max-width: 30ch;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  padding: 4rem 0;
-}
-
-.logo {
-  position: relative;
-}
-
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    background: rgba(var(--card-rgb), 0.2);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  background: rgba(var(--card-rgb), 0.2);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
   }
 
   .card:hover span {
-    transform: translateX(4px);
+  transform: translateX(4px);
   }
 }
 
 @media (prefers-reduced-motion) {
   .card:hover span {
-    transform: none;
+  transform: none;
   }
 }
 
