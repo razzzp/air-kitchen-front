@@ -8,12 +8,16 @@ export default class AuthHandler {
         
     }
 
-    public storeNewCredentials(credentials: TBearerCredentials){
+    public static storeNewCredentials(credentials: TBearerCredentials){
         const cookies = new Cookies();
-        cookies.set(TOKEN_COOKIENAME, credentials);
+        cookies.set(TOKEN_COOKIENAME, credentials,
+            {
+                path:'/',
+                domain:'localhost'
+            });
     }
 
-    public getCredentials(){
+    public static getCredentials() : TBearerCredentials{
         const cookies = new Cookies();
         return cookies.get(TOKEN_COOKIENAME);
     }

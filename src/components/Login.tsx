@@ -6,6 +6,8 @@ import ButtonStyles from '@/styles/Button.module.css';
 import AirKitchenClient from '@/lib/clients/AirKitchenClient';
 import AuthHandler from '@/lib/auth/AuthHandler';
 import Router from 'next/router';
+import Card from './Card';
+
 type TLoginResponse = {
     tokenType:string; 
     accessToken:string; 
@@ -57,6 +59,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
             Router.push('/');
         } catch(e) {
             console.error(e);
+            alert('Failed to login')
         }
     }
 
@@ -72,6 +75,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
             Router.push('/');
         } catch (e) {
             console.error(e);
+            alert('Failed to login');
         }
     }
 
@@ -92,8 +96,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
     componentDidMount(): void {
         (window as any).onGoogleLogin = this.onGoogleLogin;
         this.useExternalScripts('https://accounts.google.com/gsi/client');
-        const auth = new AuthHandler();
-        const creds = auth.getCredentials();
+        const creds = AuthHandler.getCredentials();
         if(creds) this.setState({user:creds.user});
     }
 
@@ -109,7 +112,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
         return (
             <>
             <main className={HomeStyles.main}>
-                <div className={HomeStyles.card}>
+                <Card>
                     <div className={FormStyles['form-title']}><h2 >Login</h2></div>
                     <form  onSubmit={this.onBasicLogin.bind(this)} noValidate>
                         <div className={FormStyles['form-body']}>
@@ -146,7 +149,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
                         data-size="large"
                         data-logo_alignment="left">
                     </div>
-                </div>
+                </Card>
             </main>
             </>
         ); 
