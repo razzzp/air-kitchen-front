@@ -1,12 +1,14 @@
 
 import React, { ChangeEvent, FormEvent } from 'react';
 import FormStyles from '@/styles/Form.module.css';
-import HomeStyles from '@/styles/Home.module.css';
+import HomeStyles from '@/styles/Common.module.css';
 import ButtonStyles from '@/styles/Button.module.css';
 import AirKitchenClient from '@/lib/clients/AirKitchenClient';
 import AuthHandler from '@/lib/auth/AuthHandler';
 import Router from 'next/router';
 import Card from './Card';
+import { Form } from 'react-router-dom';
+import { getFromPathCookie } from '@/lib/utils';
 
 type TLoginResponse = {
     tokenType:string; 
@@ -67,15 +69,22 @@ export default class LoginForm extends React.Component<IProps, IState> {
         // Prevent the browser from reloading the page
         e.preventDefault();
 
+        let res = null;
         try {
             const client = new AirKitchenClient();
-            const res = await client.doBasicLogin(this.state.username, this.state.password);
-
-            console.log(res);
-            Router.push('/');
+            res = await client.doBasicLogin(this.state.username, this.state.password);
         } catch (e) {
             console.error(e);
             alert('Failed to login');
+        }
+
+        console.log(res);
+        //
+        const fromPath = getFromPathCookie();
+        if(fromPath && typeof fromPath === 'string') {
+            return Router.push(fromPath);
+        } else {
+            return Router.push('/');    
         }
     }
 

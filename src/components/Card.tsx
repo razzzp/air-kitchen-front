@@ -1,4 +1,4 @@
-import HomeStyles from '@/styles/Home.module.css';
+import HomeStyles from '@/styles/Common.module.css';
 
 interface ICardProps{
     children: any

@@ -172,4 +172,23 @@ export default class AirKitchenClient {
         const listOfOrders = response.data.map(AirKitchenClient._parseIOrder)
         return listOfOrders;
     }
+
+    public async refreshAccessToken(refreshToken: string) : Promise<TBearerCredentials>{
+        if(refreshToken === '') return null;
+        try{
+            const body = {
+                refreshToken: refreshToken,
+            };
+            const response = await Axios.post('http://localhost:3001/api/v1/login/refresh-token',body);
+            if (!this._validateBearerCredentials(response.data)) throw new Error('Invalid response');
+            
+            return response.data;
+        } catch(e) {
+            throw e;
+        }
+    }
+}
+
+export function getAirKitchenClient(){
+    return new AirKitchenClient();
 }
