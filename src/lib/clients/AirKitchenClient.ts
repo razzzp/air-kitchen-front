@@ -154,7 +154,7 @@ export default class AirKitchenClient {
         if(!('id' in data)) return null;
         result.id = data.id;
         if('name' in data && typeof data.name === 'string') result.name = data.name;
-        if('desc' in data && typeof data.desc === 'string') result.desc = data.desc;
+        if('description' in data && typeof data.description === 'string') result.desc = data.description;
         if('status' in data && typeof data.status === 'string') result.status = AirKitchenClient._parseEOrderStatus(data.status);
         if('dueDate' in data && typeof data.dueDate === 'string') result.dueDate = new Date(data.dueDate);
         if('salePrice' in data && typeof data.salePrice === 'string') result.salePrice = data.salePrice;

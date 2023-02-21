@@ -30,9 +30,7 @@ export default class Order extends React.Component<IOrderProps> {
             <>
             <Card>
                 <h2>{this.props.order.name}</h2>
-                <p>{this.props.order.desc}</p>
                 <p>Status: {this.props.order.status}</p>
-                <p>Sale Price: {this.props.order.salePrice}</p>
             </Card>
             </>
         )

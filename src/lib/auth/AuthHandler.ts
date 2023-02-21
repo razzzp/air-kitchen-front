@@ -26,7 +26,11 @@ export default class AuthHandler {
     }
 
     private static _areCredentialsValid(creds: TBearerCredentials) : boolean {
-        if(creds.expiryDate < Date.now()) return true;
+        const now = Date.now();
+        const nowD = new Date(now);
+        const exp = creds.expiryDate;
+        const expD = new Date(exp);
+        if(creds.expiryDate > Date.now()) return true;
         //
         return false;
     }

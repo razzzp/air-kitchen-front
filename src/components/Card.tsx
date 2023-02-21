@@ -1,4 +1,4 @@
-import HomeStyles from '@/styles/Common.module.css';
+import CommonStyles from '@/styles/Common.module.css';
 
 interface ICardProps{
     children: any
@@ -6,7 +6,7 @@ interface ICardProps{
 
 export default function Card(props: ICardProps){
     return (
-        <div className={HomeStyles.card}>
+        <div className={CommonStyles.card}>
             {props.children}
         </div>
     );
