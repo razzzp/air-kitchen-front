@@ -3,11 +3,10 @@ import AuthHandler from '@/lib/auth/AuthHandler';
 import AirKitchenClient, {IOrder} from '@/lib/clients/AirKitchenClient';
 import {useEffect, useState} from 'react';
 import CommonStyles from '@/styles/Common.module.css';
+import ButtonStyles from "@/styles/Button.module.css";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { setFromPathCookie } from '@/lib/utils';
-import OrderDetails from '@/components/OrderDetails';
-import css from 'styled-jsx/css';
 
 interface IOrdersState {
     orders : Array<IOrder>;
@@ -22,7 +21,7 @@ export default function Orders(){
         (async () => {
             const creds = await AuthHandler.getValidCredentials();
             if(!creds) {
-                // set 
+                // set creds
                 setFromPathCookie(router.asPath);
                 return router.push('/login');
             }
@@ -40,6 +39,10 @@ export default function Orders(){
         .catch((e)=>console.error(e));
 
     });
+
+    const newOrderOnClick = function() {
+        router.push('/orders/new')
+    }
     
     return (
         <>
@@ -49,26 +52,26 @@ export default function Orders(){
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
+        <nav className={CommonStyles.navbar}>
+            <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
+            <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
+        </nav>
         <main className={CommonStyles.main} >
-            <div>For Buttons</div>
-            <div className={CommonStyles['split-column']}>
-                <div className={CommonStyles.list}>
-                {
-                    (state.orders) ? state.orders.map((curOrder)=>{
-                        return (
-                            <div key={curOrder.id} onClick={()=>setState({orders: state.orders, selectedOrder:curOrder})}>
-                                <Order key={curOrder.id} order={curOrder} />
-                            </div>
-                        )
-                    }) : null
-                }
-                </div>
-                <div>
-                {
-                    (state.selectedOrder) ? <OrderDetails order={state.selectedOrder}/> : null
-                }
-                </div>
-            </div>            
+            <div className={CommonStyles['button-container']}>
+                <button onClick={newOrderOnClick} className={ButtonStyles['button-38']}>New Order</button>
+            </div>
+            <div className={CommonStyles.list}>
+            {
+                (state.orders) ? state.orders.map((curOrder)=>{
+                    return (
+                        // TODO implement on click
+                        <div key={curOrder.id} onClick={()=>console.log(`${curOrder.name} clicked`)}>
+                            <Order key={curOrder.id} order={curOrder} />
+                        </div>
+                    )
+                }) : null
+            }
+            </div>
         </main>
         </>
     )

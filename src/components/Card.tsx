@@ -4,7 +4,7 @@ interface ICardProps{
     children: any
 }
 
-export default function Card(props: ICardProps){
+export default function Card(props: ICardProps){ 
     return (
         <div className={CommonStyles.card}>
             {props.children}

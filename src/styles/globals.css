@@ -5,6 +5,8 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
+  --font-sans-serif: Arial, Helvetica;
+
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
@@ -42,6 +44,11 @@ body {
 body {
   color: rgb(var(--foreground-rgb));
   background: var(--background-end-rgb);
+}
+
+h1, h2, h3, h4, p {
+  font-family: var(--font-sans-serif);
+  
 }
 
 a {
