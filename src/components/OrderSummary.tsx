@@ -7,7 +7,7 @@ export interface IOrderProps {
     order: IOrder;
 }
 
-export default class Order extends React.Component<IOrderProps> {
+export default class OrderSummary extends React.Component<IOrderProps> {
     constructor(props: IOrderProps) {
         super(props);
     }

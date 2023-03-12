@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import Card from "./Card";
-import { IOrderProps } from "./Order";
+import { IOrderProps } from "./OrderSummary";
 import FormStyles from '@/styles/Form.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
 import AirKitchenClient, { EOrderStatus, IOrder } from "@/lib/clients/AirKitchenClient";
@@ -37,16 +37,23 @@ export default function OrderForm(props: IOrderProps){
         if (e.target instanceof HTMLTextAreaElement){
             const newStatePartial : {[key:string]: string}= {};
             newStatePartial[e.target.name] = e.target.value;
-            return setState({...state, ...newStatePartial});
+            const targetState = {...state, ...newStatePartial}
+            return setState(targetState);
         } else if (e.target instanceof HTMLInputElement){
             const newStatePartial : {[key:string]: string}= {};
             newStatePartial[e.target.name] = e.target.value;
-            return setState({...state, ...newStatePartial});
+            const targetState = {...state, ...newStatePartial}
+            return setState(targetState);
+        } else if (e.target instanceof HTMLSelectElement){
+            const newStatePartial : {[key:string]: string}= {};
+            newStatePartial[e.target.name] = e.target.value;
+            const targetState = {...state, ...newStatePartial}
+            return setState(targetState);
         }
     }
 
     return <>
-        <Card>
+        <div>
             <form onSubmit={onSubmit}>
                 <div className={FormStyles['form-body']}>
                     <div className={FormStyles['form-field-group']}>
@@ -57,30 +64,30 @@ export default function OrderForm(props: IOrderProps){
                             name="name"
                             className="form-control" 
                             onChange={onOrderChange} 
-                            value={props.order.name}
+                            value={state.name}
                             required />
                         </div>
                     </div>
                     <div className={FormStyles['form-field-group']}>
-                        <label>Description</label>
+                        <label>Description:</label>
                         <div>
                             <textarea 
                             name="desc" 
                             className="form-control" 
                             onChange={onOrderChange}
-                            defaultValue={props.order.desc}></textarea>
+                            value={state.desc}></textarea>
                         </div>
                     </div>
                     <div className={FormStyles['form-field-group']}>
                         <label>Status:</label>
                         <div>
-                            <input 
-                            type="text" 
-                            name="status"
-                            className="form-control" 
-                            onChange={onOrderChange} 
-                            value={props.order.status}
-                            required />
+                            <select name="status" value={state.status} onChange={onOrderChange}>
+                                {
+                                Object.keys(EOrderStatus).map((val)=>{
+                                    return <option key={val} value={val}>{val}</option>
+                                })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className={FormStyles['form-field-group']}>
@@ -91,7 +98,7 @@ export default function OrderForm(props: IOrderProps){
                             name="salePrice"
                             className="form-control" 
                             onChange={onOrderChange} 
-                            value={props.order.salePrice}
+                            value={state.salePrice}
                             required />
                         </div>
                     </div>
@@ -102,6 +109,6 @@ export default function OrderForm(props: IOrderProps){
                     </div>
                 </div>  
             </form>
-        </Card>
+        </div>
     </>
 }

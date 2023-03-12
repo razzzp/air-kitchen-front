@@ -1,38 +1,25 @@
 import { IOrder } from "@/lib/clients/AirKitchenClient";
-import React from "react";
 import Card from "./Card";
 
-interface IOrderDetailsProps {
+
+export interface IOrderDetailsProps {
     order: IOrder
 }
 
-export default class OrderDetails extends React.Component<IOrderDetailsProps> {
+function _penniesToDollars(pennies: string) {
+    return `$${BigInt(pennies) / BigInt(100)}.${(BigInt(pennies) % BigInt(100)).toString().padStart(2,'0')}`;
+}
 
-    /**
-     *
-     */
-    constructor(props: IOrderDetailsProps) {
-        super(props);
-    }
 
-    componentDidMount(): void {
-        
-    }
 
-    componentWillUnmount(): void {
-        
-    }
-
-    render(): React.ReactNode {
-        return (
-        <>
-            <Card>
-                <h2>{this.props.order.name}</h2>
-                <p>{this.props.order.desc}</p>
-                <p>Status: {this.props.order.status}</p>
-                <p>Sale Price: {this.props.order.salePrice}</p>
-            </Card>
-        </>
-        )
-    }
+export default function OrderDetails(props: IOrderDetailsProps) {
+    return <>
+            <div>
+                <h2>{props.order.name}</h2>
+                <p>{props.order.desc}</p>
+                <p>Due Date: {props.order.dueDate ? props.order.dueDate.toDateString():'None'}</p>
+                <p>Status: {props.order.status}</p>
+                <p>Sale Price: {_penniesToDollars(props.order.salePrice)}</p>
+            </div>
+        </>;
 }

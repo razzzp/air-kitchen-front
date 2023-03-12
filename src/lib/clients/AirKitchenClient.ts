@@ -214,13 +214,23 @@ export default class AirKitchenClient {
     }
 
     public static async postNewOrder(newOrder: IOrderToPost, creds: ICredentials) : Promise<IOrder>{
-        const getConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+        const postConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
 
-        const response = await Axios.post('http://localhost:3001/api/v1/orders', newOrder, getConfig);
+        const response = await Axios.post('http://localhost:3001/api/v1/orders', newOrder, postConfig);
         if(!response) return undefined;
 
         const savedOrder = AirKitchenClient._parseIOrder(response.data);
         return savedOrder;
+    }
+
+    public static async retrieveOrder(orderId: string, creds: ICredentials) : Promise<IOrder> {
+        const getConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+
+        const response = await Axios.get(`http://localhost:3001/api/v1/orders/${orderId}`, getConfig);
+        if(!response) return undefined;
+
+        const retrievedOrder = AirKitchenClient._parseIOrder(response.data);
+        return retrievedOrder;
     }
 
     public static buildNewOrder() : IOrder{

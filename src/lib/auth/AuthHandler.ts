@@ -1,6 +1,8 @@
 import { Autour_One } from "@next/font/google";
+import { NextRouter } from "next/router";
 import Cookies from "universal-cookie";
-import AirKitchenClient, { getAirKitchenClient, TBearerCredentials } from "../clients/AirKitchenClient";
+import { getAirKitchenClient, TBearerCredentials } from "../clients/AirKitchenClient";
+import { setFromPathCookie } from "../utils";
 
 const TOKEN_COOKIENAME = 'auth-token';
 

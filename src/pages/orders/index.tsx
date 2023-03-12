@@ -1,11 +1,11 @@
-import Order from '@/components/Order';
+import OrderSummary from '@/components/OrderSummary';
 import AuthHandler from '@/lib/auth/AuthHandler';
 import AirKitchenClient, {IOrder} from '@/lib/clients/AirKitchenClient';
-import {useEffect, useState} from 'react';
+import {MouseEvent, MouseEventHandler, useEffect, useState} from 'react';
 import CommonStyles from '@/styles/Common.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { setFromPathCookie } from '@/lib/utils';
 
 interface IOrdersState {
@@ -40,10 +40,16 @@ export default function Orders(){
 
     });
 
-    const newOrderOnClick = function() {
+    const newOrderOnClick = () => {
         router.push('/orders/new')
     }
     
+    const buildOrderOnClick =  <T = Element>(orderId: number, router: NextRouter) : MouseEventHandler<T> => {
+        return (e: MouseEvent<T>) => {
+            return router.push(`/orders/${orderId}`);
+        };
+    }
+
     return (
         <>
         <Head>
@@ -65,8 +71,8 @@ export default function Orders(){
                 (state.orders) ? state.orders.map((curOrder)=>{
                     return (
                         // TODO implement on click
-                        <div key={curOrder.id} onClick={()=>console.log(`${curOrder.name} clicked`)}>
-                            <Order key={curOrder.id} order={curOrder} />
+                        <div key={curOrder.id} onClick={buildOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
+                            <OrderSummary key={curOrder.id} order={curOrder} />
                         </div>
                     )
                 }) : null
