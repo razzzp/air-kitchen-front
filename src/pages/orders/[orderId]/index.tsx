@@ -1,15 +1,24 @@
 import OrderDetails from "@/components/OrderDetails";
-import AirKitchenClient from "@/lib/clients/AirKitchenClient";
+import AirKitchenClient, { IOrder } from "@/lib/clients/AirKitchenClient";
 import { getValidCredentialsOrRedirect } from "@/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React from "react";
 import CommonStyles from '@/styles/Common.module.css';
+import Link from "next/link";
 
-export default function ViewOrder() {
+interface IViewOrderProps {
+
+}
+
+interface IViewOrderState {
+    order: IOrder;
+}
+
+export default function ViewOrder(props : IViewOrderProps) {
     const router = useRouter();
-    const [state, setState] = useState({order: undefined})
-    useEffect(()=>{
+    const [state, setState] = React.useState<IViewOrderState>({order: undefined})
+    React.useEffect(()=>{
         (async () =>{
             if(!router.isReady) return;
             
@@ -31,7 +40,11 @@ export default function ViewOrder() {
             </Head>
             <nav className={CommonStyles.navbar}>
                 <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-                <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
+                <div className={CommonStyles['navbar-remainder']}>
+                    <h3>Orders</h3>
+                </div>
+                <div className={CommonStyles['navbar-action-button']}><h3><Link href={`/orders/${state.order.id}/edit`}>Edit</Link></h3>
+                </div>
             </nav>
             <main className={CommonStyles.main}>
                 <OrderDetails order={state.order} />

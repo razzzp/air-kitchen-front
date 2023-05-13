@@ -34,6 +34,15 @@ export interface IOrderToPost {
     dueDate?: Date;
 }
 
+export interface IOrderToPut {
+    id: number;
+    name?: string;
+    description?: string;
+    status?: number;
+    salePrice?: string;
+    dueDate?: Date;
+}
+
 export interface IBasicCredentials {
     username: string;
     password: string;
@@ -223,6 +232,16 @@ export default class AirKitchenClient {
         return savedOrder;
     }
 
+    public static async putOrder(order: IOrderToPut, creds: ICredentials) : Promise<IOrder>{
+        const putConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+
+        const response = await Axios.put(`http://localhost:3001/api/v1/orders/${order.id}`, order, putConfig);
+        if(!response) return undefined;
+
+        const savedOrder = AirKitchenClient._parseIOrder(response.data);
+        return savedOrder;
+    }
+
     public static async retrieveOrder(orderId: string, creds: ICredentials) : Promise<IOrder> {
         const getConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
 
@@ -244,9 +263,9 @@ export default class AirKitchenClient {
         return newOrder;
     }
 
-    public static buildOrderToPost(order: IOrder) {
+    public static buildOrderForPost(order: IOrder) {
         const newOrder = new OrderToPost();
-        newOrder.id = undefined;
+        newOrder.id = order.id;
         newOrder.name = order.name;
         newOrder.description = order.desc;
         newOrder.status = AirKitchenClient._getEOrderStatusAsInt(order.status);
@@ -254,6 +273,17 @@ export default class AirKitchenClient {
         newOrder.salePrice = order.salePrice;
         return newOrder;
     }   
+
+    public static buildOrderForPut(order: IOrder) {
+        const orderToPut = new OrderToPut();
+        orderToPut.id = order.id;
+        orderToPut.name = order.name;
+        orderToPut.description = order.desc;
+        orderToPut.status = AirKitchenClient._getEOrderStatusAsInt(order.status);
+        orderToPut.dueDate = order.dueDate;
+        orderToPut.salePrice = order.salePrice;
+        return orderToPut;
+    }  
 }
 
 class Order implements IOrder {
@@ -273,6 +303,15 @@ class OrderToPost implements IOrderToPost {
     salePrice: string;
     dueDate?: Date;
     
+}
+
+class OrderToPut implements IOrderToPut {
+    id: number;
+    name?: string;
+    description?: string;
+    status?: number;
+    salePrice?: string;
+    dueDate?: Date;
 }
 
 export function getAirKitchenClient(){

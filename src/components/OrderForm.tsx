@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import Card from "./Card";
 import { IOrderProps } from "./OrderSummary";
 import FormStyles from '@/styles/Form.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
@@ -8,12 +7,12 @@ import AuthHandler from "@/lib/auth/AuthHandler";
 import { setFromPathCookie } from "@/lib/utils";
 import { useRouter } from "next/router";
 
-interface IOrderFormState extends IOrder{
-
+interface IOrderFormState{
+    order: IOrder;
 }
 
 export default function OrderForm(props: IOrderProps){
-    const [state, setState] = useState<IOrderFormState>(props.order);
+    const [state, setState] = useState<IOrderFormState>({order: props.order});
     const router = useRouter();
     const onSubmit = async (e: FormEvent)=>{
         e.preventDefault();
@@ -24,31 +23,42 @@ export default function OrderForm(props: IOrderProps){
                 setFromPathCookie(router.asPath);
                 return router.push('/login');
             }
-            const orderToPost = AirKitchenClient.buildOrderToPost(state);
-            const savedOrder = AirKitchenClient.postNewOrder(orderToPost, {token: creds.accessToken});
-            console.log(savedOrder);
-            return router.push('/orders');
+            if(state.order.id){
+                // has id so perform put
+                const orderToPut = AirKitchenClient.buildOrderForPut(state.order);
+                const savedOrder = AirKitchenClient.putOrder(orderToPut, {token: creds.accessToken});
+                console.log(savedOrder);
+                return router.push(`/orders/${orderToPut.id}`);
+            } else {
+                // else new order do post
+                const orderToPost = AirKitchenClient.buildOrderForPost(state.order);
+                const savedOrder = AirKitchenClient.postNewOrder(orderToPost, {token: creds.accessToken});
+                console.log(savedOrder);
+                return router.push('/orders');
+            }
         } catch (error) {
             console.log(error);
         }
-    }
+    } 
+
+
 
     const onOrderChange = (e: ChangeEvent<HTMLElement>)=> {
         if (e.target instanceof HTMLTextAreaElement){
-            const newStatePartial : {[key:string]: string}= {};
-            newStatePartial[e.target.name] = e.target.value;
-            const targetState = {...state, ...newStatePartial}
-            return setState(targetState);
+            const newOrderPartial : {[key:string]: string}= {};
+            newOrderPartial[e.target.name] = e.target.value;
+            const targetOrder = {...state.order, ...newOrderPartial}
+            return setState({order:targetOrder});
         } else if (e.target instanceof HTMLInputElement){
-            const newStatePartial : {[key:string]: string}= {};
-            newStatePartial[e.target.name] = e.target.value;
-            const targetState = {...state, ...newStatePartial}
-            return setState(targetState);
+            const newOrderPartial : {[key:string]: string}= {};
+            newOrderPartial[e.target.name] = e.target.value;
+            const targetOrder = {...state.order, ...newOrderPartial}
+            return setState({order:targetOrder});
         } else if (e.target instanceof HTMLSelectElement){
-            const newStatePartial : {[key:string]: string}= {};
-            newStatePartial[e.target.name] = e.target.value;
-            const targetState = {...state, ...newStatePartial}
-            return setState(targetState);
+            const newOrderPartial : {[key:string]: string}= {};
+            newOrderPartial[e.target.name] = e.target.value;
+            const targetOrder = {...state.order, ...newOrderPartial}
+            return setState({order:targetOrder});
         }
     }
 
@@ -64,7 +74,7 @@ export default function OrderForm(props: IOrderProps){
                             name="name"
                             className="form-control" 
                             onChange={onOrderChange} 
-                            value={state.name}
+                            value={state.order.name}
                             required />
                         </div>
                     </div>
@@ -75,15 +85,15 @@ export default function OrderForm(props: IOrderProps){
                             name="desc" 
                             className="form-control" 
                             onChange={onOrderChange}
-                            value={state.desc}></textarea>
+                            value={state.order.desc}></textarea>
                         </div>
                     </div>
                     <div className={FormStyles['form-field-group']}>
                         <label>Status:</label>
                         <div>
-                            <select name="status" value={state.status} onChange={onOrderChange}>
+                            <select name="status" value={state.order.status} onChange={onOrderChange}>
                                 {
-                                Object.keys(EOrderStatus).map((val)=>{
+                                Object.values(EOrderStatus).map((val)=>{
                                     return <option key={val} value={val}>{val}</option>
                                 })
                                 }
@@ -98,7 +108,7 @@ export default function OrderForm(props: IOrderProps){
                             name="salePrice"
                             className="form-control" 
                             onChange={onOrderChange} 
-                            value={state.salePrice}
+                            value={state.order.salePrice}
                             required />
                         </div>
                     </div>
