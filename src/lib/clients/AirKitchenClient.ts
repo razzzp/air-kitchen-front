@@ -29,7 +29,7 @@ export interface IOrderToPost {
     id?: number;
     name: string;
     description: string;
-    status: number;
+    status: string;
     salePrice: string;
     dueDate?: Date;
 }
@@ -38,7 +38,7 @@ export interface IOrderToPut {
     id: number;
     name?: string;
     description?: string;
-    status?: number;
+    status?: string;
     salePrice?: string;
     dueDate?: Date;
 }
@@ -143,7 +143,7 @@ export default class AirKitchenClient {
         }
     }
 
-    private static _parseEOrderStatus(value : string){
+    private static _deprecated_parseEOrderStatus(value : string){
         switch (value){
             case '0':
                 return EOrderStatus.Pending;
@@ -189,7 +189,7 @@ export default class AirKitchenClient {
         result.id = data.id;
         if('name' in data && typeof data.name === 'string') result.name = data.name;
         if('description' in data && typeof data.description === 'string') result.desc = data.description;
-        if('status' in data && typeof data.status === 'string') result.status = AirKitchenClient._parseEOrderStatus(data.status);
+        if('status' in data && typeof data.status === 'string') result.status = <EOrderStatus>(data.status);
         if('dueDate' in data && typeof data.dueDate === 'string') result.dueDate = new Date(data.dueDate);
         if('salePrice' in data && typeof data.salePrice === 'string') result.salePrice = data.salePrice;
 
@@ -268,7 +268,7 @@ export default class AirKitchenClient {
         newOrder.id = order.id;
         newOrder.name = order.name;
         newOrder.description = order.desc;
-        newOrder.status = AirKitchenClient._getEOrderStatusAsInt(order.status);
+        newOrder.status = order.status;
         newOrder.dueDate = order.dueDate;
         newOrder.salePrice = order.salePrice;
         return newOrder;
@@ -279,7 +279,7 @@ export default class AirKitchenClient {
         orderToPut.id = order.id;
         orderToPut.name = order.name;
         orderToPut.description = order.desc;
-        orderToPut.status = AirKitchenClient._getEOrderStatusAsInt(order.status);
+        orderToPut.status = order.status;
         orderToPut.dueDate = order.dueDate;
         orderToPut.salePrice = order.salePrice;
         return orderToPut;
@@ -299,7 +299,7 @@ class OrderToPost implements IOrderToPost {
     id?: number;
     name: string;
     description: string;
-    status: number;
+    status: string;
     salePrice: string;
     dueDate?: Date;
     
@@ -309,7 +309,7 @@ class OrderToPut implements IOrderToPut {
     id: number;
     name?: string;
     description?: string;
-    status?: number;
+    status?: string;
     salePrice?: string;
     dueDate?: Date;
 }
