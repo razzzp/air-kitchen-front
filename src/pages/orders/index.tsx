@@ -6,28 +6,24 @@ import CommonStyles from '@/styles/Common.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
 import Head from 'next/head';
 import { NextRouter, useRouter } from 'next/router';
-import { setFromPathCookie } from '@/lib/utils';
+import { getValidCredentialsOrRedirect, setFromPathCookie } from '@/lib/utils';
 
 interface IOrdersState {
     orders : Array<IOrder>;
     selectedOrder: IOrder;
 }
 
-export default function Orders(){
+export default function Orders() {
     const initalState : IOrdersState= {orders: null, selectedOrder:null};
     const [state, setState] = useState(initalState);
     const router = useRouter();
     useEffect(()=>{
         (async () => {
-            const creds = await AuthHandler.getValidCredentials();
-            if(!creds) {
-                // set creds
-                setFromPathCookie(router.asPath);
-                return router.push('/login');
-            }
+            if(!router.isReady) return;
+            const creds = await getValidCredentialsOrRedirect(router);
+
 
             if(state.orders) return;
-            
             const listOfOrders = await AirKitchenClient.retrieveOrders({token: creds.accessToken});
             if (!listOfOrders) return;
             setState({
@@ -70,7 +66,6 @@ export default function Orders(){
             {
                 (state.orders) ? state.orders.map((curOrder)=>{
                     return (
-                        // TODO implement on click
                         <div key={curOrder.id} onClick={buildOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
                             <OrderSummary key={curOrder.id} order={curOrder} />
                         </div>

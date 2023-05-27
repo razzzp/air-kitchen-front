@@ -1,17 +1,10 @@
-.form-group {
-  display: flex;
-  justify-content: center;
-  align-items: inherit;
-}
 
 .form-body {
-  display: inherit;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
   width: 100%;
-  z-index: 2;
+  font-size: 1rem;
   font-family: var(--font-sans-serif);
 }
 
@@ -27,12 +20,37 @@
 }
 
 .form-field-group {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  margin-bottom: 2em;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
-.form-field-group label{
-  font-weight: bold;
+.form-label{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.form-input-text{
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  box-shadow: none;
+  border: 1px solid grey;
+  width: 100%;
+}
+
+.form-input-textarea{
+  font-size: 1rem;
+  resize: vertical;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.form-input-select{
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  box-shadow: none;
+  border: 1px solid grey;
 }

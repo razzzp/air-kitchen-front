@@ -126,13 +126,15 @@ export default class LoginForm extends React.Component<IProps, IState> {
                         <div className={FormStyles['form-body']}>
                             <div className={FormStyles['form-field-group']}>
                                 <label>
-                                    Username: <input type="text" className="form-control" onChange={this.onUsernameChange.bind(this)} required />
+                                    Username:
                                 </label>
+                                <input type="text" className={FormStyles['form-input-text']} onChange={this.onUsernameChange.bind(this)} required />
                             </div>
                             <div className={FormStyles['form-field-group']}>
                                 <label>
-                                    Password: <input type="password" className="form-control" onChange={this.onPasswordChange.bind(this)} required />
+                                    Password:
                                 </label>
+                                <input type="password" className={FormStyles['form-input-text']} onChange={this.onPasswordChange.bind(this)} required />
                             </div>
                             <div className={FormStyles['form-field-group']}>
                                 <div className="col-2">

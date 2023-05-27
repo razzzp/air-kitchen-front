@@ -1,4 +1,3 @@
-import { Autour_One } from "@next/font/google";
 import { NextRouter } from "next/router";
 import Cookies from "universal-cookie";
 import { getAirKitchenClient, TBearerCredentials } from "../clients/AirKitchenClient";
@@ -39,14 +38,15 @@ export default class AuthHandler {
 
     public static async getValidCredentials() : Promise<TBearerCredentials>{
         const curCreds = AuthHandler.getCredentials();
-        if(!curCreds) return null;
+        if(!curCreds) return undefined;
 
         if(AuthHandler._areCredentialsValid(curCreds)) return curCreds;
         // creds not valid, try to refresh
         const newCreds = await getAirKitchenClient().refreshAccessToken(curCreds.refreshToken);
-        if (!newCreds) return null;
+        if (!newCreds) return undefined;
 
         AuthHandler.storeNewCredentials(newCreds);
         return newCreds;
     }
+
 }

@@ -214,11 +214,12 @@ export default class AirKitchenClient {
                 refreshToken: refreshToken,
             };
             const response = await Axios.post('http://localhost:3001/api/v1/login/refresh-token',body);
-            if (!this._validateBearerCredentials(response.data)) throw new Error('Invalid response');
+            if (!this._validateBearerCredentials(response.data)) return undefined;
             
             return response.data;
         } catch(e) {
-            throw e;
+            console.error(`Error when trying to refresh access token. ${e}`);
+            return undefined;
         }
     }
 

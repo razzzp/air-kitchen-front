@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { IOrderProps } from "./OrderSummary";
 import FormStyles from '@/styles/Form.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
+import CommonStyles from "@/styles/Common.module.css";
 import AirKitchenClient, { EOrderStatus, IOrder } from "@/lib/clients/AirKitchenClient";
 import AuthHandler from "@/lib/auth/AuthHandler";
 import { setFromPathCookie } from "@/lib/utils";
@@ -63,62 +64,64 @@ export default function OrderForm(props: IOrderProps){
     }
 
     return <>
-        <div>
-            <form onSubmit={onSubmit}>
-                <div className={FormStyles['form-body']}>
-                    <div className={FormStyles['form-field-group']}>
-                        <label>Name:</label>
-                        <div>
-                            <input 
+        <form onSubmit={onSubmit}>
+            <div className={FormStyles['form-body']}>
+                <div className={FormStyles['form-field-group']}>
+                    <label className={FormStyles['form-label']}>Name:</label>
+                    <div>
+                        <input 
                             type="text" 
                             name="name"
-                            className="form-control" 
+                            className={FormStyles['form-input-text']} 
                             onChange={onOrderChange} 
                             value={state.order.name}
                             required />
-                        </div>
                     </div>
-                    <div className={FormStyles['form-field-group']}>
-                        <label>Description:</label>
-                        <div>
-                            <textarea 
-                            name="desc" 
-                            className="form-control" 
+                </div>
+                <div className={FormStyles['form-field-group']}>
+                    <label className={FormStyles['form-label']}>Description:</label>
+                    <div>
+                        <textarea 
+                        name="desc" 
+                        className={FormStyles['form-input-textarea']} 
+                        onChange={onOrderChange}
+                        value={state.order.desc}></textarea>
+                    </div>
+                </div>
+                <div className={FormStyles['form-field-group']}>
+                    <label className={FormStyles['form-label']}>Status:</label>
+                    <div>
+                        <select 
+                            name="status" 
+                            value={state.order.status} 
                             onChange={onOrderChange}
-                            value={state.order.desc}></textarea>
-                        </div>
+                            className={FormStyles['form-input-select']}>
+                            {
+                            Object.values(EOrderStatus).map((val)=>{
+                                return <option key={val} value={val}>{val}</option>
+                            })
+                            }
+                        </select>
                     </div>
-                    <div className={FormStyles['form-field-group']}>
-                        <label>Status:</label>
-                        <div>
-                            <select name="status" value={state.order.status} onChange={onOrderChange}>
-                                {
-                                Object.values(EOrderStatus).map((val)=>{
-                                    return <option key={val} value={val}>{val}</option>
-                                })
-                                }
-                            </select>
-                        </div>
+                </div>
+                <div className={FormStyles['form-field-group']}>
+                    <label className={FormStyles['form-label']}>Sale Price:</label>
+                    <div>
+                        <input 
+                        type="text" 
+                        name="salePrice"
+                        className={FormStyles['form-input-text']} 
+                        onChange={onOrderChange} 
+                        value={state.order.salePrice}
+                        required />
                     </div>
-                    <div className={FormStyles['form-field-group']}>
-                        <label>Sale Price:</label>
-                        <div>
-                            <input 
-                            type="text" 
-                            name="salePrice"
-                            className="form-control" 
-                            onChange={onOrderChange} 
-                            value={state.order.salePrice}
-                            required />
-                        </div>
+                </div>
+                <div className={FormStyles['form-field-group']}>
+                    <div className="col-2">
+                        <button type="submit" className={ButtonStyles['button-38']}>Save</button>
                     </div>
-                    <div className={FormStyles['form-field-group']}>
-                        <div className="col-2">
-                            <button type="submit" className={ButtonStyles['button-38']}>Save</button>
-                        </div>
-                    </div>
-                </div>  
-            </form>
-        </div>
+                </div>
+            </div>  
+        </form>
     </>
 }

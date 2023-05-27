@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import CommonStyles from '@/styles/Common.module.css';
 import Link from "next/link";
+import AuthHandler from "@/lib/auth/AuthHandler";
 
 interface IViewOrderProps {
 
@@ -21,10 +22,10 @@ export default function ViewOrder(props : IViewOrderProps) {
     React.useEffect(()=>{
         (async () =>{
             if(!router.isReady) return;
-            
+            const creds = await getValidCredentialsOrRedirect(router);
+
             const {orderId} = router.query;
             if(typeof orderId !== 'string') return router.push('/404');
-            const creds = await getValidCredentialsOrRedirect(router);
             const order = await AirKitchenClient.retrieveOrder(orderId, {token: creds.accessToken});
             return setState({order: order});
         })();
