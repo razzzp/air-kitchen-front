@@ -54,3 +54,12 @@
   box-shadow: none;
   border: 1px solid grey;
 }
+
+.form-action-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.form-action-container > * {
+  margin-right: 1em ;
+}

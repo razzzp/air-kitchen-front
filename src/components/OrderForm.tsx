@@ -63,6 +63,16 @@ export default function OrderForm(props: IOrderProps){
         }
     }
 
+    const cancelEdit = function(e: FormEvent) {
+        return router.push(`/orders/${state.order.id}`)
+    }
+
+    const deleteOrder = async function(e: FormEvent) {
+        const creds = await AuthHandler.getValidCredentials();
+        const resp = AirKitchenClient.deleteOrder(state.order.id.toString(), {token: creds.accessToken});
+        return router.push(`/orders`);
+    }
+
     return <>
         <form onSubmit={onSubmit}>
             <div className={FormStyles['form-body']}>
@@ -116,9 +126,15 @@ export default function OrderForm(props: IOrderProps){
                         required />
                     </div>
                 </div>
-                <div className={FormStyles['form-field-group']}>
+                <div className={FormStyles['form-action-container']}>
                     <div className="col-2">
                         <button type="submit" className={ButtonStyles['button-38']}>Save</button>
+                    </div>
+                    <div>
+                        <button type="button" className={ButtonStyles['button-38']} onClick={cancelEdit}>Cancel</button>
+                    </div>
+                    <div>
+                        <button type="button" className={ButtonStyles['button-danger']} onClick={deleteOrder}>Delete</button>
                     </div>
                 </div>
             </div>  

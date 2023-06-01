@@ -252,6 +252,13 @@ export default class AirKitchenClient {
         const retrievedOrder = AirKitchenClient._parseIOrder(response.data);
         return retrievedOrder;
     }
+    
+    public static async deleteOrder(orderId: string, creds: ICredentials) : Promise<any> {
+        const deleteConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+        
+        const resp = await Axios.delete(`http://localhost:3001/api/v1/orders/${orderId}`, deleteConfig);
+        return resp.data;
+    }
 
     public static buildNewOrder() : IOrder{
         const newOrder = new Order();
