@@ -59,19 +59,21 @@ export default function Orders() {
             <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
         </nav>
         <main className={CommonStyles.main} >
-            <div className={CommonStyles['button-container']}>
-                <button onClick={newOrderOnClick} className={ButtonStyles['button-38']}>New Order</button>
-            </div>
-            <div className={CommonStyles.list}>
-            {
-                (state.orders) ? state.orders.map((curOrder)=>{
-                    return (
-                        <div key={curOrder.id} onClick={buildOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
-                            <OrderSummary key={curOrder.id} order={curOrder} />
-                        </div>
-                    )
-                }) : null
-            }
+            <div className={CommonStyles.content}>
+                <div className={CommonStyles['button-container']}>
+                    <button onClick={newOrderOnClick} className={ButtonStyles['button-38']}>New Order</button>
+                </div>
+                <div className={CommonStyles.list}>
+                {
+                    (state.orders) ? state.orders.map((curOrder)=>{
+                        return (
+                            <div key={curOrder.id} onClick={buildOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
+                                <OrderSummary key={curOrder.id} order={curOrder} />
+                            </div>
+                        )
+                    }) : null
+                }
+                </div>
             </div>
         </main>
         </>

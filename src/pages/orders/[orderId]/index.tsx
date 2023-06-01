@@ -44,11 +44,11 @@ export default function ViewOrder(props : IViewOrderProps) {
                 <div className={CommonStyles['navbar-remainder']}>
                     <h3>Orders</h3>
                 </div>
-                <div className={CommonStyles['navbar-action-button']}><h3><Link href={`/orders/${state.order.id}/edit`}>Edit</Link></h3>
-                </div>
             </nav>
             <main className={CommonStyles.main}>
-                <OrderDetails order={state.order} />
+                <div className={CommonStyles.content}>
+                    <OrderDetails order={state.order} />    
+                </div>
             </main>
     </>
     else return <div></div>;

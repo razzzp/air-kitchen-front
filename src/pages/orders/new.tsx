@@ -18,7 +18,9 @@ export default function NewOrder(){
         <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
     </nav>
     <main className={CommonStyles.main}>
-        <OrderForm order={newOrder} />
+        <div className={CommonStyles.content}>
+            <OrderForm order={newOrder} />
+        </div>
     </main>
     </>
 }

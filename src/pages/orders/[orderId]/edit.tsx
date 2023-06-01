@@ -39,7 +39,9 @@ export default function EditOrder() {
                 <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
             </nav>
             <main className={CommonStyles.main}>
-                <OrderForm order={state.order} />
+                <div className={CommonStyles.content}>
+                    <OrderForm order={state.order} />
+                </div>
             </main>
     </>
     else return <div></div>;

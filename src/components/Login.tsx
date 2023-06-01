@@ -119,48 +119,46 @@ export default class LoginForm extends React.Component<IProps, IState> {
     render(): React.ReactNode {    
         return (
             <>
-            <main className={HomeStyles.main}>
-                <Card>
-                    <div className={FormStyles['form-title']}><h2 >Login</h2></div>
-                    <form  onSubmit={this.onBasicLogin.bind(this)} noValidate>
-                        <div className={FormStyles['form-body']}>
-                            <div className={FormStyles['form-field-group']}>
-                                <label>
-                                    Username:
-                                </label>
-                                <input type="text" className={FormStyles['form-input-text']} onChange={this.onUsernameChange.bind(this)} required />
-                            </div>
-                            <div className={FormStyles['form-field-group']}>
-                                <label>
-                                    Password:
-                                </label>
-                                <input type="password" className={FormStyles['form-input-text']} onChange={this.onPasswordChange.bind(this)} required />
-                            </div>
-                            <div className={FormStyles['form-field-group']}>
-                                <div className="col-2">
-                                    <button type="submit" className={ButtonStyles['button-38']}>Login</button>
-                                </div>
+            <Card>
+                <div className={FormStyles['form-title']}><h2 >Login</h2></div>
+                <form  onSubmit={this.onBasicLogin.bind(this)} noValidate>
+                    <div className={FormStyles['form-body']}>
+                        <div className={FormStyles['form-field-group']}>
+                            <label>
+                                Username:
+                            </label>
+                            <input type="text" className={FormStyles['form-input-text']} onChange={this.onUsernameChange.bind(this)} required />
+                        </div>
+                        <div className={FormStyles['form-field-group']}>
+                            <label>
+                                Password:
+                            </label>
+                            <input type="password" className={FormStyles['form-input-text']} onChange={this.onPasswordChange.bind(this)} required />
+                        </div>
+                        <div className={FormStyles['form-field-group']}>
+                            <div className="col-2">
+                                <button type="submit" className={ButtonStyles['button-38']}>Login</button>
                             </div>
                         </div>
-                    </form>
-                    <div id="g_id_onload"
-                        data-client_id="325790205622-r4pns2qk3lni19mrud8pvlp69dc3q4ea.apps.googleusercontent.com"
-                        data-context="signin"
-                        data-ux_mode="popup"
-                        data-callback="onGoogleLogin"
-                        data-auto_prompt="false">
                     </div>
-        
-                    <div className="g_id_signin"
-                        data-type="standard"
-                        data-shape="rectangular"
-                        data-theme="outline"
-                        data-text="signin_with"
-                        data-size="large"
-                        data-logo_alignment="left">
-                    </div>
-                </Card>
-            </main>
+                </form>
+                <div id="g_id_onload"
+                    data-client_id="325790205622-r4pns2qk3lni19mrud8pvlp69dc3q4ea.apps.googleusercontent.com"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="onGoogleLogin"
+                    data-auto_prompt="false">
+                </div>
+    
+                <div className="g_id_signin"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="outline"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="left">
+                </div>
+            </Card>
             </>
         ); 
     }
