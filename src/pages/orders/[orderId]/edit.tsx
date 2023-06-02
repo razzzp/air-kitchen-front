@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import CommonStyles from '@/styles/Common.module.css';
 import OrderForm from "@/components/OrderForm";
+import NavBar from "@/components/NavBar";
 
 interface IEditOrderState {
     order: IOrder;
@@ -34,10 +35,7 @@ export default function EditOrder() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <nav className={CommonStyles.navbar}>
-                <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-                <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
-            </nav>
+            <NavBar title="Orders" />
             <main className={CommonStyles.main}>
                 <div className={CommonStyles.content}>
                     <OrderForm order={state.order} />

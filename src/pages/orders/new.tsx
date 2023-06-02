@@ -1,3 +1,4 @@
+import NavBar from "@/components/NavBar";
 import OrderForm from "@/components/OrderForm";
 import AirKitchenClient, { getAirKitchenClient } from "@/lib/clients/AirKitchenClient";
 import CommonStyles from '@/styles/Common.module.css';
@@ -13,10 +14,7 @@ export default function NewOrder(){
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
     </Head>
-    <nav className={CommonStyles.navbar}>
-        <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-        <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
-    </nav>
+    <NavBar title="Orders"/>
     <main className={CommonStyles.main}>
         <div className={CommonStyles.content}>
             <OrderForm order={newOrder} />

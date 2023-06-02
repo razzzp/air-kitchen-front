@@ -75,6 +75,7 @@ export default class LoginForm extends React.Component<IProps, IState> {
         } catch (e) {
             console.error(e);
             alert('Failed to login');
+            return;
         }
 
         console.log(res);

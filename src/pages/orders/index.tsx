@@ -7,6 +7,7 @@ import ButtonStyles from "@/styles/Button.module.css";
 import Head from 'next/head';
 import { NextRouter, useRouter } from 'next/router';
 import { getValidCredentialsOrRedirect, setFromPathCookie } from '@/lib/utils';
+import NavBar from '@/components/NavBar';
 
 interface IOrdersState {
     orders : Array<IOrder>;
@@ -54,10 +55,7 @@ export default function Orders() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <nav className={CommonStyles.navbar}>
-            <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-            <div className={CommonStyles['navbar-remainder']}><h3>Orders</h3></div>
-        </nav>
+        <NavBar title='Orders'/>
         <main className={CommonStyles.main} >
             <div className={CommonStyles.content}>
                 <div className={CommonStyles['button-container']}>

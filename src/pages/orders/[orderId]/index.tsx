@@ -7,6 +7,7 @@ import React from "react";
 import CommonStyles from '@/styles/Common.module.css';
 import Link from "next/link";
 import AuthHandler from "@/lib/auth/AuthHandler";
+import NavBar from "@/components/NavBar";
 
 interface IViewOrderProps {
 
@@ -39,12 +40,7 @@ export default function ViewOrder(props : IViewOrderProps) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <nav className={CommonStyles.navbar}>
-                <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-                <div className={CommonStyles['navbar-remainder']}>
-                    <h3>Orders</h3>
-                </div>
-            </nav>
+            <NavBar title="Orders" />
             <main className={CommonStyles.main}>
                 <div className={CommonStyles.content}>
                     <OrderDetails order={state.order} />    

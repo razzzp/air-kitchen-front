@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import CommonStyles from '@/styles/Common.module.css'
+import NavBar from '@/components/NavBar'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -14,10 +15,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav className={CommonStyles.navbar}>
-        <div className={CommonStyles['navbar-button']}><h3>Nav</h3></div>
-        <div className={CommonStyles['navbar-remainder']}><h3>Air Kitchen</h3></div>
-      </nav>
+      <NavBar title='AirKitchen'/>
       <main className={CommonStyles.main}>
         <div className={CommonStyles.content}>
           <div className={CommonStyles.description}>
