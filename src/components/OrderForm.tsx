@@ -3,7 +3,7 @@ import { IOrderProps } from "./OrderSummary";
 import FormStyles from '@/styles/Form.module.css';
 import ButtonStyles from "@/styles/Button.module.css";
 import CommonStyles from "@/styles/Common.module.css";
-import AirKitchenClient, { EOrderStatus, IOrder } from "@/lib/clients/AirKitchenClient";
+import AirKitchenClient, { EOrderStatus, IOrder, getAirKitchenClient } from "@/lib/clients/AirKitchenClient";
 import AuthHandler from "@/lib/auth/AuthHandler";
 import { setFromPathCookie } from "@/lib/utils";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ interface IOrderFormState{
 export default function OrderForm(props: IOrderProps){
     const [state, setState] = useState<IOrderFormState>({order: props.order});
     const router = useRouter();
+    const client = getAirKitchenClient();
     const onSubmit = async (e: FormEvent)=>{
         e.preventDefault();
         try {
@@ -26,14 +27,14 @@ export default function OrderForm(props: IOrderProps){
             }
             if(state.order.id){
                 // has id so perform put
-                const orderToPut = AirKitchenClient.buildOrderForPut(state.order);
-                const savedOrder = AirKitchenClient.putOrder(orderToPut, {token: creds.accessToken});
+                const orderToPut = client.buildOrderForPut(state.order);
+                const savedOrder = await client.putOrder(orderToPut, {token: creds.accessToken});
                 console.log(savedOrder);
                 return router.push(`/orders/${orderToPut.id}`);
             } else {
                 // else new order do post
-                const orderToPost = AirKitchenClient.buildOrderForPost(state.order);
-                const savedOrder = AirKitchenClient.postNewOrder(orderToPost, {token: creds.accessToken});
+                const orderToPost = client.buildOrderForPost(state.order);
+                const savedOrder = await client.postNewOrder(orderToPost, {token: creds.accessToken});
                 console.log(savedOrder);
                 return router.push('/orders');
             }
@@ -64,12 +65,13 @@ export default function OrderForm(props: IOrderProps){
     }
 
     const cancelEdit = function(e: FormEvent) {
-        return router.push(`/orders/${state.order.id}`)
+        if(state.order.id) return router.push(`/orders/${state.order.id}`);
+        else return router.push(`/orders`)
     }
 
     const deleteOrder = async function(e: FormEvent) {
         const creds = await AuthHandler.getValidCredentials();
-        const resp = AirKitchenClient.deleteOrder(state.order.id.toString(), {token: creds.accessToken});
+        const resp = client.deleteOrder(state.order.id.toString(), {token: creds.accessToken});
         return router.push(`/orders`);
     }
 

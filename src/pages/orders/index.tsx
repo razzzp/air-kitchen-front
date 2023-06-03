@@ -8,43 +8,13 @@ import Head from 'next/head';
 import { NextRouter, useRouter } from 'next/router';
 import { getValidCredentialsOrRedirect, setFromPathCookie } from '@/lib/utils';
 import NavBar from '@/components/NavBar';
-
-interface IOrdersState {
-    orders : Array<IOrder>;
-    selectedOrder: IOrder;
-}
+import OrderBrowser from '@/components/OrderBrowser';
 
 export default function Orders() {
-    const initalState : IOrdersState= {orders: null, selectedOrder:null};
-    const [state, setState] = useState(initalState);
-    const router = useRouter();
-    useEffect(()=>{
-        (async () => {
-            if(!router.isReady) return;
-            const creds = await getValidCredentialsOrRedirect(router);
-
-
-            if(state.orders) return;
-            const listOfOrders = await AirKitchenClient.retrieveOrders({token: creds.accessToken});
-            if (!listOfOrders) return;
-            setState({
-                orders: listOfOrders,
-                selectedOrder: listOfOrders.length > 0 ? listOfOrders[0] : null
-            })
-        })()
-        .then(()=>console.log('Orders loaded.'))
-        .catch((e)=>console.error(e));
-
-    });
+    const router = useRouter(); 
 
     const newOrderOnClick = () => {
         router.push('/orders/new')
-    }
-    
-    const viewOrderOnClick =  <T = Element>(orderId: number, router: NextRouter) : MouseEventHandler<T> => {
-        return (e: MouseEvent<T>) => {
-            return router.push(`/orders/${orderId}`);
-        };
     }
 
     return (
@@ -61,17 +31,7 @@ export default function Orders() {
                 <div className={CommonStyles['button-container']}>
                     <button onClick={newOrderOnClick} className={ButtonStyles['button-38']}>New Order</button>
                 </div>
-                <div className={CommonStyles.list}>
-                {
-                    (state.orders) ? state.orders.map((curOrder)=>{
-                        return (
-                            <div key={curOrder.id} onClick={viewOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
-                                <OrderSummary key={curOrder.id} order={curOrder} />
-                            </div>
-                        )
-                    }) : null
-                }
-                </div>
+                <OrderBrowser />
             </div>
         </main>
         </>

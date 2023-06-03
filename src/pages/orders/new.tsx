@@ -6,7 +6,8 @@ import Head from "next/head";
 
 
 export default function NewOrder(){
-    const newOrder = AirKitchenClient.buildNewOrder();
+    const client = getAirKitchenClient();
+    const newOrder = client.buildNewOrder();
     return <>
     <Head>
         <title>air kitchen</title>

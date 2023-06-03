@@ -1,5 +1,5 @@
 import OrderDetails from "@/components/OrderDetails";
-import AirKitchenClient, { IOrder } from "@/lib/clients/AirKitchenClient";
+import AirKitchenClient, { IOrder, getAirKitchenClient } from "@/lib/clients/AirKitchenClient";
 import { getValidCredentialsOrRedirect } from "@/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ interface IEditOrderState {
 export default function EditOrder() {
     const router = useRouter();
     const [state, setState] = React.useState<IEditOrderState>({order: undefined})
+    const client = getAirKitchenClient();
     React.useEffect(()=>{
         (async () =>{
             if(!router.isReady) return;
@@ -22,7 +23,7 @@ export default function EditOrder() {
             const {orderId} = router.query;
             if(typeof orderId !== 'string') return router.push('/404');
             const creds = await getValidCredentialsOrRedirect(router);
-            const order = await AirKitchenClient.retrieveOrder(orderId, {token: creds.accessToken});
+            const order = await client.getOrder(orderId, {token: creds.accessToken});
             return setState({order: order});
         })();
     }, [router, router.isReady]);

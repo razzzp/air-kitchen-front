@@ -2,6 +2,7 @@ import Axios, { RawAxiosRequestConfig } from "axios";
 import { listenerCount } from "process";
 import { isThrowStatement } from "typescript";
 import AuthHandler from "../auth/AuthHandler";
+import { deprecate } from "util";
 
 export interface IUser {
     displayName: string;
@@ -66,13 +67,26 @@ export type TBasicLoginData = {
     password: string;
 }
 
+export interface IOrderQuery {
+    id? : number;
+    name? : string;
+    status? : EOrderStatus;
+}
+
 export default class AirKitchenClient {
     
+    private _hostname : string;
+    private _port : number;
     /**
      *
      */
-    constructor() {
-        
+    constructor(hostname: string = 'localhost', port: number = 8080) {
+        this._hostname = hostname;
+        this._port = port;
+    }
+
+    private _buildBaseURL() {
+        return `http://${this._hostname}:${this._port}`
     }
     
     private _validateBasicLoginData(data : any) : data is TBasicLoginData {
@@ -92,7 +106,7 @@ export default class AirKitchenClient {
                 username: username,
                 password: password
             };
-            const response = await Axios.post('http://localhost:3001/api/v1/login',body);
+            const response = await Axios.post(`${this._buildBaseURL()}/api/v1/login`,body);
             if (!this._validateBearerCredentials(response.data)) throw new Error('Invalid response');
             // store creds
             const creds = response.data;
@@ -117,7 +131,7 @@ export default class AirKitchenClient {
 
     public async doGoogleLogin(data : any){
         try{
-            const response = await Axios.post('http://localhost:3001/api/v1/login-google', data);
+            const response = await Axios.post(`${this._buildBaseURL()}/api/v1/login-google`, data);
             if (!this._validateBearerCredentials(response.data)) throw new Error('Invalid response');
 
             // store creds
@@ -129,7 +143,7 @@ export default class AirKitchenClient {
         }
     }
 
-    private static _buildAxiosRequestConfig(credentials: ICredentials): RawAxiosRequestConfig {
+    private _buildAxiosRequestConfig(credentials: ICredentials): RawAxiosRequestConfig {
         if (credentials.token){
             return {
                 headers:{
@@ -143,7 +157,7 @@ export default class AirKitchenClient {
         }
     }
 
-    private static _deprecated_parseEOrderStatus(value : string){
+    private _deprecated_parseEOrderStatus(value : string){
         switch (value){
             case '0':
                 return EOrderStatus.Pending;
@@ -159,7 +173,7 @@ export default class AirKitchenClient {
         throw new Error('cannot parser Order Status')
     }
 
-    private static _getEOrderStatusAsInt(value : EOrderStatus){
+    private _getEOrderStatusAsInt(value : EOrderStatus){
         switch (value){
             case EOrderStatus.Pending:
                 return 0;
@@ -175,7 +189,7 @@ export default class AirKitchenClient {
         throw new Error('cannot parser Order Status')
     }
 
-    private static _parseIOrder(data: any) : IOrder{
+    private _parseIOrder(data: any) : IOrder{
         const result = {
             id: <number> undefined,
             name: '',
@@ -196,14 +210,23 @@ export default class AirKitchenClient {
         return result;
     }
     
+    private _buildGetOrderURLWithQuery(queryOptions: IOrderQuery) : string{
+        const url = new URL(`${this._buildBaseURL()}/api/v1/orders`);
+        if(queryOptions.id) url.searchParams.set("id", queryOptions.id.toString());
+        if(queryOptions.name) url.searchParams.set("name", queryOptions.name.toString());
+        if(queryOptions.status) url.searchParams.set("status", queryOptions.status.toString());
+        return url.toString();
+    }
 
-    public static async retrieveOrders(creds: ICredentials): Promise<Array<IOrder>> {
-        const getConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+    public async getOrders(creds: ICredentials, queryOptions: IOrderQuery): Promise<Array<IOrder>> {
+        const getConfig = this._buildAxiosRequestConfig(creds);
 
-        const response = await Axios.get('http://localhost:3001/api/v1/orders', getConfig);
+        const url = this._buildGetOrderURLWithQuery(queryOptions);
+
+        const response = await Axios.get(url, getConfig);
         if(!response || !Array.isArray(response.data)) return undefined;
 
-        const listOfOrders = response.data.map(AirKitchenClient._parseIOrder)
+        const listOfOrders = response.data.map(this._parseIOrder)
         return listOfOrders;
     }
 
@@ -213,7 +236,7 @@ export default class AirKitchenClient {
             const body = {
                 refreshToken: refreshToken,
             };
-            const response = await Axios.post('http://localhost:3001/api/v1/login/refresh-token',body);
+            const response = await Axios.post(`${this._buildBaseURL()}/api/v1/login/refresh-token`,body);
             if (!this._validateBearerCredentials(response.data)) return undefined;
             
             return response.data;
@@ -223,44 +246,44 @@ export default class AirKitchenClient {
         }
     }
 
-    public static async postNewOrder(newOrder: IOrderToPost, creds: ICredentials) : Promise<IOrder>{
-        const postConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+    public async postNewOrder(newOrder: IOrderToPost, creds: ICredentials) : Promise<IOrder>{
+        const postConfig = this._buildAxiosRequestConfig(creds);
 
-        const response = await Axios.post('http://localhost:3001/api/v1/orders', newOrder, postConfig);
+        const response = await Axios.post(`${this._buildBaseURL()}/api/v1/orders`, newOrder, postConfig);
         if(!response) return undefined;
 
-        const savedOrder = AirKitchenClient._parseIOrder(response.data);
+        const savedOrder = this._parseIOrder(response.data);
         return savedOrder;
     }
 
-    public static async putOrder(order: IOrderToPut, creds: ICredentials) : Promise<IOrder>{
-        const putConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+    public async putOrder(order: IOrderToPut, creds: ICredentials) : Promise<IOrder>{
+        const putConfig = this._buildAxiosRequestConfig(creds);
 
-        const response = await Axios.put(`http://localhost:3001/api/v1/orders/${order.id}`, order, putConfig);
+        const response = await Axios.put(`${this._buildBaseURL()}/api/v1/orders/${order.id}`, order, putConfig);
         if(!response) return undefined;
 
-        const savedOrder = AirKitchenClient._parseIOrder(response.data);
+        const savedOrder = this._parseIOrder(response.data);
         return savedOrder;
     }
 
-    public static async retrieveOrder(orderId: string, creds: ICredentials) : Promise<IOrder> {
-        const getConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+    public async getOrder(orderId: string, creds: ICredentials) : Promise<IOrder> {
+        const getConfig = this._buildAxiosRequestConfig(creds);
 
-        const response = await Axios.get(`http://localhost:3001/api/v1/orders/${orderId}`, getConfig);
+        const response = await Axios.get(`${this._buildBaseURL()}/api/v1/orders/${orderId}`, getConfig);
         if(!response) return undefined;
 
-        const retrievedOrder = AirKitchenClient._parseIOrder(response.data);
+        const retrievedOrder = this._parseIOrder(response.data);
         return retrievedOrder;
     }
     
-    public static async deleteOrder(orderId: string, creds: ICredentials) : Promise<any> {
-        const deleteConfig = AirKitchenClient._buildAxiosRequestConfig(creds);
+    public async deleteOrder(orderId: string, creds: ICredentials) : Promise<any> {
+        const deleteConfig = this._buildAxiosRequestConfig(creds);
         
-        const resp = await Axios.delete(`http://localhost:3001/api/v1/orders/${orderId}`, deleteConfig);
+        const resp = await Axios.delete(`${this._buildBaseURL()}/api/v1/orders/${orderId}`, deleteConfig);
         return resp.data;
     }
 
-    public static buildNewOrder() : IOrder{
+    public buildNewOrder() : IOrder{
         const newOrder = new Order();
         newOrder.id = undefined;
         newOrder.name = 'New Order';
@@ -271,7 +294,7 @@ export default class AirKitchenClient {
         return newOrder;
     }
 
-    public static buildOrderForPost(order: IOrder) {
+    public buildOrderForPost(order: IOrder) {
         const newOrder = new OrderToPost();
         newOrder.id = order.id;
         newOrder.name = order.name;
@@ -282,7 +305,7 @@ export default class AirKitchenClient {
         return newOrder;
     }   
 
-    public static buildOrderForPut(order: IOrder) {
+    public buildOrderForPut(order: IOrder) {
         const orderToPut = new OrderToPut();
         orderToPut.id = order.id;
         orderToPut.name = order.name;
@@ -323,5 +346,5 @@ class OrderToPut implements IOrderToPut {
 }
 
 export function getAirKitchenClient(){
-    return new AirKitchenClient();
+    return new AirKitchenClient('localhost', 3001);
 }

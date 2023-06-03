@@ -1,0 +1,27 @@
+
+.status-tabs-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 1rem;
+}
+
+.status-tab {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    justify-content: center;
+    min-height: 40px;
+    background-color: white;
+    border: none;
+    border-bottom: solid #c7d6ec 2px;
+}
+
+
+.status-tab-selected {
+    border-bottom: solid #718eb9 2px; 
+}
+
+.status-tab:hover {
+    border-bottom: solid #718eb9 2px;
+}
