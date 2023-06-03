@@ -41,7 +41,7 @@ export default function Orders() {
         router.push('/orders/new')
     }
     
-    const buildOrderOnClick =  <T = Element>(orderId: number, router: NextRouter) : MouseEventHandler<T> => {
+    const viewOrderOnClick =  <T = Element>(orderId: number, router: NextRouter) : MouseEventHandler<T> => {
         return (e: MouseEvent<T>) => {
             return router.push(`/orders/${orderId}`);
         };
@@ -65,7 +65,7 @@ export default function Orders() {
                 {
                     (state.orders) ? state.orders.map((curOrder)=>{
                         return (
-                            <div key={curOrder.id} onClick={buildOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
+                            <div key={curOrder.id} onClick={viewOrderOnClick<HTMLDivElement>(curOrder.id,router)}>
                                 <OrderSummary key={curOrder.id} order={curOrder} />
                             </div>
                         )
