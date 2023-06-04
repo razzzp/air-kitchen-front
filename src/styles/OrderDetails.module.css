@@ -1,0 +1,42 @@
+
+
+.view-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.view-container .field-group, .view-container h2 {
+    margin-bottom: 0.2rem;
+}
+
+.view-container p {
+    margin-bottom: 1rem;
+}
+
+.view-container .button-container {
+    margin-top: 1rem;
+}
+
+.field-group {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.field-label {
+    width: 30%;
+    flex: 0 0 auto;
+}
+
+.field-value {
+    flex: 1 1 auto
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+

@@ -1,4 +1,3 @@
-import OrderDetails from "@/components/OrderDetails";
 import AirKitchenClient, { IOrder, getAirKitchenClient } from "@/lib/clients/AirKitchenClient";
 import { getValidCredentialsOrRedirect } from "@/lib/utils";
 import Head from "next/head";

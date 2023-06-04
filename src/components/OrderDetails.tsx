@@ -4,6 +4,7 @@ import CommonStyles from '@/styles/Common.module.css';
 import ButtonStyles from '@/styles/Button.module.css'
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
+import OrderDetailsStyles from "@/styles/OrderDetails.module.css";
 
 
 export interface IOrderDetailsProps {
@@ -24,13 +25,22 @@ export default function OrderDetails(props: IOrderDetailsProps) {
     }
 
     return <>
-            <div>
+            <div className={OrderDetailsStyles['view-container']}>
                 <h2>{props.order.name}</h2>
                 <p>{props.order.desc}</p>
-                <p>Due Date: {props.order.dueDate ? props.order.dueDate.toDateString():'None'}</p>
-                <p>Status: {props.order.status}</p>
-                <p>Sale Price: {_penniesToDollars(props.order.salePrice)}</p>
-                <div className={CommonStyles['button-container']}>
+                <div className={OrderDetailsStyles['field-group']}>
+                    <div className={OrderDetailsStyles['field-label']}>Status:</div>
+                    <div className={OrderDetailsStyles['field-value']}>{props.order.status}</div>
+                </div>
+                <div className={OrderDetailsStyles['field-group']}>
+                    <div className={OrderDetailsStyles['field-label']}>Due Date:</div>
+                    <div className={OrderDetailsStyles['field-value']}>{props.order.dueDate ? props.order.dueDate.toDateString():'None'}</div>
+                </div>
+                <div className={OrderDetailsStyles['field-group']}>
+                    <div className={OrderDetailsStyles['field-label']}>Sale Price:</div>
+                    <div className={OrderDetailsStyles['field-value']}>{_penniesToDollars(props.order.salePrice)}</div>
+                </div>
+                <div className={OrderDetailsStyles['button-container']}>
                     <button type="button" className={ButtonStyles['button-38']} onClick={editOrder}>Edit</button>
                 </div>
             </div>
