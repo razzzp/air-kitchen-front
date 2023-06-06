@@ -33,3 +33,7 @@ export async function getValidCredentialsOrRedirect(router: NextRouter) : Promis
     }
     return creds;
 }
+
+export function penniesToDollars(pennies: string) {
+    return Number(pennies) / 100;
+}

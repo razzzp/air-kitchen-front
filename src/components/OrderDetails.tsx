@@ -5,6 +5,7 @@ import ButtonStyles from '@/styles/Button.module.css'
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import OrderDetailsStyles from "@/styles/OrderDetails.module.css";
+import { penniesToDollars } from "@/lib/utils";
 
 
 export interface IOrderDetailsProps {
@@ -12,10 +13,8 @@ export interface IOrderDetailsProps {
 }
 
 function _penniesToDollars(pennies: string) {
-    return `$${BigInt(pennies) / BigInt(100)}.${(BigInt(pennies) % BigInt(100)).toString().padStart(2,'0')}`;
+    return `$${penniesToDollars(pennies).toFixed(2)}`;
 }
-
-
 
 export default function OrderDetails(props: IOrderDetailsProps) {
     const router = useRouter()

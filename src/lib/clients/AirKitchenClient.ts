@@ -3,6 +3,7 @@ import { listenerCount } from "process";
 import { isThrowStatement } from "typescript";
 import AuthHandler from "../auth/AuthHandler";
 import { deprecate } from "util";
+import { publicDecrypt } from "crypto";
 
 export interface IUser {
     displayName: string;
@@ -314,7 +315,7 @@ export default class AirKitchenClient {
         orderToPut.dueDate = order.dueDate;
         orderToPut.salePrice = order.salePrice;
         return orderToPut;
-    }  
+    }
 }
 
 class Order implements IOrder {

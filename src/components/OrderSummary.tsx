@@ -3,12 +3,12 @@ import React from "react";
 import Card from "./Card";
 
 
-export interface IOrderProps {
+export interface IOrderSummaryProps {
     order: IOrder;
 }
 
-export default class OrderSummary extends React.Component<IOrderProps> {
-    constructor(props: IOrderProps) {
+export default class OrderSummary extends React.Component<IOrderSummaryProps> {
+    constructor(props: IOrderSummaryProps) {
         super(props);
     }
 
